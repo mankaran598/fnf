@@ -172,7 +172,18 @@ class SongSequence
   private function onUpdate():Void
   {
     if (!running) return;
-    while (timers[0].time + startTime > Conductor.instance.songPosition) timers.shift().callback();
+
+    var len:Int = timers.length;
+    for (i in 0...len)
+    {
+      var timer:SequenceEvent = timers[len - 1 - i];
+      if (timer.time + startTime > Conductor.instance.songPosition)
+      {
+        timer.callback();
+        timers.remove(timer);
+      }
+    }
+
     if (completed) destroy();
   }
 
