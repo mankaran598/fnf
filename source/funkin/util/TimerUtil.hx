@@ -1,6 +1,7 @@
 package funkin.util;
 
 import flixel.util.FlxTimer;
+import funkin.Conductor;
 import funkin.util.tools.FloatTools;
 import haxe.Timer;
 
@@ -55,6 +56,9 @@ typedef SequenceEvent =
   callback: ()->Void
 };
 
+/**
+ * A timer sequence based on Flxtimers.
+ */
 class Sequence
 {
   /**
@@ -98,11 +102,7 @@ class Sequence
 
   @:noCompletion public function set_running(v:Bool):Bool
   {
-    for (timer in timers)
-    {
-      timer.active = v;
-    }
-
+    for (timer in timers) timer.active = v;
     return _running = v;
   }
 
@@ -127,9 +127,88 @@ class Sequence
       timer.destroy();
     }
 
-    while (!completed)
-    {
-      timers.pop();
-    }
+    while (!completed) timers.pop();
+  }
+}
+
+/**
+ * A timer sequence based on songPosition.
+ */
+class SongSequence
+{
+  /**
+   * Signal dispatched by Conductor.instance.update.
+   */
+  public static final update(default, null):FlxSignal = new FlxSignal();
+
+  /**
+   * Create a new timer sequence (follows Conductor).
+   * @param events A list of function callbacks along with their corresponding call times, in seconds.
+   * @param mult Optional multiplier for callback times. Great for frame-based or music-based timing.
+   * @param start Whether or not to immediately start the sequence.
+   */
+  public function new(events:Array<SequenceEvent>, mult:Float = 1, start:Bool = true)
+  {
+    for (event in events) timers.push(event);
+
+    startTime = Conductor.instance.songPosition;
+    running = start;
+    update.add(onUpdate);
+  }
+
+  /**
+   * Keeps track of the time this sequence started, or the relative time if it was previously stopped.
+   */
+  private var startTime:Float;
+
+  /**
+   * The list of uncompleted timers.
+   */
+  private final timers:Array<SequenceEvent> = [];
+
+  /**
+   * Update function invoked by the update signal.
+   */
+  private function onUpdate():Void
+  {
+    if (!running) return;
+    while (timers[0].time + startTime > Conductor.instance.songPosition) timers.shift().callback();
+    if (completed) destroy();
+  }
+
+  /**
+   * Controls whether the timers in this sequence are active or not.
+   */
+  public var running(get, set):Bool;
+  private var _running:Bool = true;
+
+  @:noCompletion public function get_running():Bool
+  {
+    return completed ? false : _running;
+  }
+
+  @:noCompletion public function set_running(v:Bool):Bool
+  {
+    if (v != _running) startTime = Conductor.instance.songPosition - startTime; // it works trust me
+    return _running = v;
+  } 
+
+  /**
+   * Whether all timers in this sequence have completed or not.
+   */
+  public var completed(get, never);
+  
+  @:noCompletion public function get_completed():Bool
+  {
+    return timers.length == 0;
+  }
+
+  /**
+   * Clean up and destroy this sequence.
+   */
+  public function destroy():Void
+  {
+    update.remove(onUpdate);
+    while (!completed) timers.pop();
   }
 }
