@@ -57,7 +57,7 @@ typedef SequenceEvent =
 };
 
 /**
- * A timer sequence based on Flxtimers.
+ * A timer sequence based on FlxTimers.
  */
 class Sequence
 {
