@@ -6,6 +6,7 @@ import flixel.addons.transition.Transition;
 import flixel.FlxCamera;
 import flixel.FlxObject;
 import flixel.FlxState;
+import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
@@ -479,6 +480,11 @@ class PlayState extends MusicBeatSubState
    * The sprite group containing opponent's strumline notes.
    */
   public var opponentStrumline:Strumline;
+
+  /**
+   * The background behind the active player's strumline.
+   */
+  public var strumlineBackground:FlxSprite;
 
   /**
    * The camera which contains, and controls visibility of, the user interface elements.
@@ -1740,8 +1746,12 @@ class PlayState extends MusicBeatSubState
     playerStrumline.onNoteIncoming.add(onStrumlineNoteIncoming);
     opponentStrumline = new Strumline(noteStyle, false);
     opponentStrumline.onNoteIncoming.add(onStrumlineNoteIncoming);
+    strumlineBackground = new FlxSprite();
+    // padding of 30
+    strumlineBackground.makeGraphic(Strumline.NOTE_SPACING * 4 + 30, 5000, FlxColor.BLACK);
     add(playerStrumline);
     add(opponentStrumline);
+    add(strumlineBackground);
 
     // Position the player strumline on the right half of the screen
     playerStrumline.x = FlxG.width / 2 + Constants.STRUMLINE_X_OFFSET; // Classic style
@@ -1755,6 +1765,13 @@ class PlayState extends MusicBeatSubState
     opponentStrumline.y = Preferences.downscroll ? FlxG.height - opponentStrumline.height - Constants.STRUMLINE_Y_OFFSET : Constants.STRUMLINE_Y_OFFSET;
     opponentStrumline.zIndex = 1000;
     opponentStrumline.cameras = [camHUD];
+
+    strumlineBackground.alpha = Preferences.gameplayBackgroundAlpha;
+    // Position the background slightly offset from the strumbar for a bit of padding
+    strumlineBackground.x = (FlxG.width / 2 + Constants.STRUMLINE_X_OFFSET) - 15;
+    strumlineBackground.y = 0;
+    strumlineBackground.zIndex = 600; // Renders beneath the health bar
+    strumlineBackground.cameras = [camHUD];
 
     if (!PlayStatePlaylist.isStoryMode)
     {
