@@ -306,7 +306,7 @@ class StoryMenuState extends MusicBeatState
   {
     Conductor.instance.update();
 
-    highScoreLerp = Std.int(MathUtil.smoothLerp(highScoreLerp, highScore, elapsed, 0.25));
+    highScoreLerp = Std.int(MathUtil.smoothLerp(highScoreLerp, highScore, elapsed, 0.5));
 
     scoreText.text = 'LEVEL SCORE: ${Math.round(highScoreLerp)}';
 
@@ -466,9 +466,6 @@ class StoryMenuState extends MusicBeatState
       // Disable the funny music thing for now.
       // funnyMusicThing();
     }
-
-    updateText();
-    refresh();
   }
 
   final FADE_OUT_TIME:Float = 1.5;

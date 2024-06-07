@@ -50,19 +50,8 @@ class FreeplayFlames extends FlxSpriteGroup
     }
   }
 
-  var timers:Array<FlxTimer> = [];
-
   function set_flameCount(value:Int):Int
   {
-    // Stop all existing timers.
-    // This fixes a bug where quickly switching difficulties would show flames.
-    for (timer in timers)
-    {
-      timer.active = false;
-      timer.destroy();
-      timers.remove(timer);
-    }
-
     this.flameCount = value;
     var visibleCount:Int = 0;
     for (i in 0...5)
@@ -73,18 +62,10 @@ class FreeplayFlames extends FlxSpriteGroup
       {
         if (!flame.visible)
         {
-          var nextTimer:FlxTimer = new FlxTimer().start(flameTimer * visibleCount, function(currentTimer:FlxTimer) {
-            if (i >= this.flameCount)
-            {
-              trace('EARLY EXIT');
-              return;
-            }
-            timers.remove(currentTimer);
+          new FlxTimer().start(flameTimer * visibleCount, function(_) {
             flame.animation.play("flame", true);
             flame.visible = true;
           });
-          timers.push(nextTimer);
-
           visibleCount++;
         }
       }

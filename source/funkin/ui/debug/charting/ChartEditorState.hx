@@ -137,7 +137,7 @@ using Lambda;
  *
  * Some functionality is split into handler classes to help maintain my sanity.
  *
- * @author EliteMasterEric
+ * @author MasterEric
  */
 // @:nullSafety
 
@@ -1270,7 +1270,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     var result:Null<SongMetadata> = songMetadata.get(selectedVariation);
     if (result == null)
     {
-      result = new SongMetadata('Default Song Name', Constants.DEFAULT_ARTIST, selectedVariation);
+      result = new SongMetadata('DadBattle', 'Kawai Sprite', selectedVariation);
       songMetadata.set(selectedVariation, result);
     }
     return result;
@@ -4566,8 +4566,8 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
             }
 
             gridGhostHoldNote.visible = true;
-            gridGhostHoldNote.noteData = currentPlaceNoteData;
-            gridGhostHoldNote.noteDirection = currentPlaceNoteData.getDirection();
+            gridGhostHoldNote.noteData = gridGhostNote.noteData;
+            gridGhostHoldNote.noteDirection = gridGhostNote.noteData.getDirection();
             gridGhostHoldNote.setHeightDirectly(dragLengthPixels, true);
 
             gridGhostHoldNote.updateHoldNotePosition(renderedHoldNotes);

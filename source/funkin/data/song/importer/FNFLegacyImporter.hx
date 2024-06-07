@@ -36,7 +36,7 @@ class FNFLegacyImporter
   {
     trace('Migrating song metadata from FNF Legacy.');
 
-    var songMetadata:SongMetadata = new SongMetadata('Import', Constants.DEFAULT_ARTIST, 'default');
+    var songMetadata:SongMetadata = new SongMetadata('Import', 'Kawai Sprite', 'default');
 
     var hadError:Bool = false;
 
@@ -65,7 +65,7 @@ class FNFLegacyImporter
 
     songMetadata.timeChanges = rebuildTimeChanges(songData);
 
-    songMetadata.playData.characters = new SongCharacterData(songData?.song?.player1 ?? 'bf', 'gf', songData?.song?.player2 ?? 'dad');
+    songMetadata.playData.characters = new SongCharacterData(songData?.song?.player1 ?? 'bf', 'gf', songData?.song?.player2 ?? 'dad', 'mom');
 
     return songMetadata;
   }

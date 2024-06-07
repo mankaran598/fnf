@@ -11,7 +11,6 @@ import flixel.system.debug.watch.Tracker;
 // These are great.
 using Lambda;
 using StringTools;
-using thx.Arrays;
 using funkin.util.tools.ArraySortTools;
 using funkin.util.tools.ArrayTools;
 using funkin.util.tools.FloatTools;

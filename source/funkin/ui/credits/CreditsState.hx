@@ -4,7 +4,6 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import funkin.audio.FunkinSound;
 import flixel.FlxSprite;
-import funkin.ui.mainmenu.MainMenuState;
 import flixel.group.FlxSpriteGroup;
 
 /**
@@ -200,7 +199,7 @@ class CreditsState extends MusicBeatState
 
   function exit():Void
   {
-    FlxG.switchState(() -> new MainMenuState());
+    FlxG.switchState(funkin.ui.mainmenu.MainMenuState.new);
   }
 
   public override function destroy():Void
